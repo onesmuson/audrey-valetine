@@ -94,10 +94,15 @@
 </head>
 <body>
 
+<!-- Background music -->
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/download/audio/2023/03/06/audio_3c9c7e9e91.mp3?filename=romantic-piano-111445.mp3" type="audio/mpeg">
+</audio>
+
 <div class="card">
   <div class="heart">❤️</div>
   <h1>Audrey Ressy Achola</h1>
-  <h2>Happy Valentine’s Day My love Audrey 🌹</h2>
+  <h2>Happy Valentine’s Day My Love 🌹</h2>
   <p>
     Audrey, every moment I spend thinking about you fills my heart with joy. 
     I admire your hard work in medicine, your kindness, and the way you light up every room. 
@@ -125,11 +130,11 @@
   <p id="reply-display" class="hidden"></p>
 
   <!-- Love counter -->
-  <p id="love-counter"></p>
+  <p id="love-counter">💖 We have loved each other for ∞ days 💖</p>
 
   <!-- Scrolling love messages -->
   <div class="ticker">
-    <span>💖 You are my future partner 💖 I cherish every moment with you 💖 I love you so much Audrey Ressy 💖 Forever am yours 💖</span>
+    <span>💖 You are my sunshine 💖 My heart beats only for you 💖 Forever yours 💖 I love you Audrey Ressy 💖</span>
   </div>
 
   <footer>— Meron</footer>
@@ -161,22 +166,13 @@
   // Floating hearts in background
   for(let i=0;i<22;i++){
     const h=document.createElement('div');
-    h.className='floating-heart';h.innerHTML='❤️';
+    h.className='floating-heart';
+    h.innerHTML='❤️';
     h.style.left=Math.random()*100+'vw';
     h.style.animationDelay=Math.random()*9+'s';
     h.style.fontSize=(Math.random()*22+14)+'px';
     document.body.appendChild(h);
   }
-
-  // Love counter - Days since start date
-  function updateLoveCounter(){
-    const startDate=new Date('2024-02-02'); // replace with the day you met
-    const today=new Date();
-    const diff=Math.floor((today-startDate)/(1000*60*60*24));
-    document.getElementById('love-counter').textContent = `💖 We have loved each other for ${diff} days 💖`;
-  }
-  updateLoveCounter();
-  setInterval(updateLoveCounter, 1000*60*60); // update every hour
 
   // Hearts follow cursor
   document.addEventListener('mousemove', function(e){
@@ -193,4 +189,3 @@
 </script>
 </body>
 </html>
-
