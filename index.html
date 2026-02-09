@@ -52,7 +52,6 @@
   button:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.25);}
   .no{background:rgba(255,255,255,.75);}
   .hidden{display:none;}
-  .yes-msg{margin-top:16px;font-size:1.05rem;animation:fadeIn 1s ease;}
 
   footer{margin-top:18px;font-size:.8rem;opacity:.9;}
 
@@ -86,10 +85,57 @@
     animation:scrollMsg 18s linear infinite;
   }
 
+  /* Animations */
   @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1);}}
   @keyframes fadeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0);}}
   @keyframes floatUp{0%{transform:translateY(0);opacity:0}10%{opacity:1}100%{transform:translateY(-110vh);opacity:0;}}
   @keyframes scrollMsg{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}  
+  @keyframes popIn{0%{transform:scale(0.3);opacity:0;}80%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
+  @keyframes glow{from{text-shadow:0 0 8px #fff;}to{text-shadow:0 0 28px #ffdde1;}}
+
+  /* Full screen YES overlay */
+  .yes-msg{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(255,105,180,0.95);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    z-index:9999;
+    text-align:center;
+    overflow:hidden;
+  }
+  .yes-msg h1{
+    font-family:'Playfair Display',serif;
+    font-size:4rem;
+    color:#fff;
+    animation:popIn 1.2s ease;
+    margin-bottom:20px;
+  }
+  .yes-msg p{
+    font-size:2rem;
+    font-weight:700;
+    color:#fff;
+    animation:glow 1.5s infinite alternate;
+  }
+
+  /* Explosion hearts */
+  .explosion-heart{
+    position:absolute;
+    font-size:20px;
+    color:#ffdde1;
+    animation:explode 2s forwards;
+    pointer-events:none;
+  }
+  @keyframes explode{
+    0%{transform:translate(0,0) scale(0.5);opacity:1;}
+    100%{transform:translate(var(--x), var(--y)) scale(1.2);opacity:0;}
+  }
+
 </style>
 </head>
 <body>
@@ -120,10 +166,6 @@
     <button class="no" id="noBtn" onmouseover="runAway()">No 🙈</button>
   </div>
 
-  <div class="yes-msg hidden" id="yesMsg">
-    🌹 Thank you, my Valentine! I love you endlessly. 🌹
-  </div>
-
   <!-- Reply section -->
   <input type="text" placeholder="Write me something, Audrey 💌" id="reply-box">
   <button id="reply-btn" onclick="sendReply()">Send</button>
@@ -140,10 +182,18 @@
   <footer>— Meron</footer>
 </div>
 
+<!-- Full screen YES overlay -->
+<div class="yes-msg hidden" id="yesMsg">
+  <h1>THANK YOU MY VALENTINE 💖</h1>
+  <p>I LOVE YOU ENDLESSLY ♾️❤️</p>
+</div>
+
 <script>
   // Yes / No buttons
   function sayYes(){
-    document.getElementById('yesMsg').classList.remove('hidden');
+    const yesDiv=document.getElementById('yesMsg');
+    yesDiv.classList.remove('hidden');
+    explodeHearts(50); // trigger heart explosion
   }
   function runAway(){
     const btn=document.getElementById('noBtn');
@@ -186,6 +236,23 @@
     document.body.appendChild(heart);
     setTimeout(()=>heart.remove(),1500);
   });
+
+  // Heart explosion function
+  function explodeHearts(count){
+    for(let i=0;i<count;i++){
+      const h=document.createElement('div');
+      h.className='explosion-heart';
+      h.innerText='❤️';
+      const angle=Math.random()*2*Math.PI;
+      const distance=Math.random()*300 + 100;
+      h.style.setProperty('--x', `${Math.cos(angle)*distance}px`);
+      h.style.setProperty('--y', `${Math.sin(angle)*distance}px`);
+      h.style.left=`50%`;
+      h.style.top=`50%`;
+      document.getElementById('yesMsg').appendChild(h);
+      setTimeout(()=>h.remove(),2000);
+    }
+  }
 </script>
 </body>
 </html>
