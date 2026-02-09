@@ -90,78 +90,19 @@
   @keyframes fadeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0);}}
   @keyframes floatUp{0%{transform:translateY(0);opacity:0}10%{opacity:1}100%{transform:translateY(-110vh);opacity:0;}}
   @keyframes scrollMsg{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}  
-  @keyframes popIn{0%{transform:scale(0.3);opacity:0;}80%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
-  @keyframes glow{from{text-shadow:0 0 8px #fff;}to{text-shadow:0 0 28px #ffdde1;}}
 
-  /* Full screen YES overlay */
+  /* Yes message inside card */
   .yes-msg{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(255,105,180,0.95);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    z-index:9999;
-    text-align:center;
-    overflow:hidden;
-  }
-  .yes-msg h1{
-    font-family:'Playfair Display',serif;
-    font-size:4rem;
-    color:#fff;
-    animation:popIn 1.2s ease;
-    margin-bottom:20px;
-  }
-  .yes-msg p{
-    font-size:2rem;
+    margin-top:16px;
+    font-size:1.3rem;
     font-weight:700;
     color:#fff;
-    animation:glow 1.5s infinite alternate;
+    animation:popIn 0.8s ease;
   }
-
-  /* Return button */
-  #returnBtn{
-    margin-top: 30px;
-    padding: 12px 28px;
-    font-size: 1.2rem;
-    font-weight: 600;
-    border-radius: 28px;
-    border: none;
-    background: #fff;
-    color: #ff4d6d;
-    cursor: pointer;
-    transition: transform .15s ease, box-shadow .15s ease;
-  }
-  #returnBtn:hover{
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(0,0,0,.25);
-  }
-
-  /* Explosion hearts */
-  .explosion-heart{
-    position:absolute;
-    font-size:20px;
-    color:#ffdde1;
-    animation:explode 2s forwards;
-    pointer-events:none;
-  }
-  @keyframes explode{
-    0%{transform:translate(0,0) scale(0.5);opacity:1;}
-    100%{transform:translate(var(--x), var(--y)) scale(1.2);opacity:0;}
-  }
-
+  @keyframes popIn{0%{transform:scale(0.3);opacity:0;}80%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
 </style>
 </head>
 <body>
-
-<!-- Background music -->
-<audio autoplay loop>
-  <source src="https://cdn.pixabay.com/download/audio/2023/03/06/audio_3c9c7e9e91.mp3?filename=romantic-piano-111445.mp3" type="audio/mpeg">
-</audio>
 
 <div class="card">
   <div class="heart">❤️</div>
@@ -184,6 +125,8 @@
     <button class="no" id="noBtn" onmouseover="runAway()">No 🙈</button>
   </div>
 
+  <div class="yes-msg hidden" id="yesMsg">💖 Thank you my Valentine! I love you endlessly! 💖</div>
+
   <!-- Reply section -->
   <input type="text" placeholder="Write me something, Audrey 💌" id="reply-box">
   <button id="reply-btn" onclick="sendReply()">Send</button>
@@ -200,35 +143,11 @@
   <footer>— Meron</footer>
 </div>
 
-<!-- Full screen YES overlay -->
-<div class="yes-msg hidden" id="yesMsg">
-  <h1>THANK YOU MY VALENTINE 💖</h1>
-  <p>I LOVE YOU ENDLESSLY ♾️❤️</p>
-  <button id="returnBtn" onclick="hideYesMsg()">Return 💌</button>
-</div>
-
 <script>
   // Yes / No buttons
   function sayYes(){
     const yesDiv = document.getElementById('yesMsg');
     yesDiv.classList.remove('hidden');
-    
-    // Trigger heart explosion
-    explodeHearts(50);
-
-    // Auto-hide after 3 seconds (optional)
-    setTimeout(() => {
-      if(!yesDiv.classList.contains('hidden')){
-        hideYesMsg();
-      }
-    }, 3000);
-  }
-
-  function hideYesMsg(){
-    const yesDiv = document.getElementById('yesMsg');
-    yesDiv.classList.add('hidden');
-    const hearts = yesDiv.querySelectorAll('.explosion-heart');
-    hearts.forEach(h => h.remove());
   }
 
   function runAway(){
@@ -272,23 +191,6 @@
     document.body.appendChild(heart);
     setTimeout(()=>heart.remove(),1500);
   });
-
-  // Heart explosion function
-  function explodeHearts(count){
-    for(let i=0;i<count;i++){
-      const h=document.createElement('div');
-      h.className='explosion-heart';
-      h.innerText='❤️';
-      const angle=Math.random()*2*Math.PI;
-      const distance=Math.random()*300 + 100;
-      h.style.setProperty('--x', `${Math.cos(angle)*distance}px`);
-      h.style.setProperty('--y', `${Math.sin(angle)*distance}px`);
-      h.style.left=`50%`;
-      h.style.top=`50%`;
-      document.getElementById('yesMsg').appendChild(h);
-      setTimeout(()=>h.remove(),2000);
-    }
-  }
 </script>
 </body>
 </html>
