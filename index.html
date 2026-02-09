@@ -13,7 +13,7 @@
     background:linear-gradient(135deg,#ff758c,#ff7eb3);
     display:flex;align-items:center;justify-content:center;
     color:#fff;overflow:hidden;position:relative;
-    cursor:none; /* hide default cursor for heart effect */
+    cursor:none;
   }
 
   .card{
@@ -191,10 +191,20 @@
 <script>
   // Yes / No buttons
   function sayYes(){
-    const yesDiv=document.getElementById('yesMsg');
+    const yesDiv = document.getElementById('yesMsg');
     yesDiv.classList.remove('hidden');
-    explodeHearts(50); // trigger heart explosion
+    
+    // Trigger heart explosion
+    explodeHearts(50);
+
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+      yesDiv.classList.add('hidden');
+      const hearts = yesDiv.querySelectorAll('.explosion-heart');
+      hearts.forEach(h => h.remove());
+    }, 3000);
   }
+
   function runAway(){
     const btn=document.getElementById('noBtn');
     const x=Math.random()*200-100;
