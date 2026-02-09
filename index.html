@@ -13,7 +13,7 @@
     background:linear-gradient(135deg,#ff758c,#ff7eb3);
     display:flex;align-items:center;justify-content:center;
     color:#fff;overflow:hidden;position:relative;
-    cursor:none;
+    cursor:none; /* hide default cursor for heart effect */
   }
 
   .card{
@@ -52,6 +52,7 @@
   button:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.25);}
   .no{background:rgba(255,255,255,.75);}
   .hidden{display:none;}
+  .yes-msg{display:none;} /* will be overridden for full screen */
 
   footer{margin-top:18px;font-size:.8rem;opacity:.9;}
 
@@ -107,7 +108,6 @@
     flex-direction:column;
     z-index:9999;
     text-align:center;
-    overflow:hidden;
   }
   .yes-msg h1{
     font-family:'Playfair Display',serif;
@@ -121,19 +121,6 @@
     font-weight:700;
     color:#fff;
     animation:glow 1.5s infinite alternate;
-  }
-
-  /* Explosion hearts */
-  .explosion-heart{
-    position:absolute;
-    font-size:20px;
-    color:#ffdde1;
-    animation:explode 2s forwards;
-    pointer-events:none;
-  }
-  @keyframes explode{
-    0%{transform:translate(0,0) scale(0.5);opacity:1;}
-    100%{transform:translate(var(--x), var(--y)) scale(1.2);opacity:0;}
   }
 
 </style>
@@ -191,20 +178,8 @@
 <script>
   // Yes / No buttons
   function sayYes(){
-    const yesDiv = document.getElementById('yesMsg');
-    yesDiv.classList.remove('hidden');
-    
-    // Trigger heart explosion
-    explodeHearts(50);
-
-    // Auto-hide after 3 seconds
-    setTimeout(() => {
-      yesDiv.classList.add('hidden');
-      const hearts = yesDiv.querySelectorAll('.explosion-heart');
-      hearts.forEach(h => h.remove());
-    }, 3000);
+    document.getElementById('yesMsg').classList.remove('hidden');
   }
-
   function runAway(){
     const btn=document.getElementById('noBtn');
     const x=Math.random()*200-100;
@@ -246,23 +221,6 @@
     document.body.appendChild(heart);
     setTimeout(()=>heart.remove(),1500);
   });
-
-  // Heart explosion function
-  function explodeHearts(count){
-    for(let i=0;i<count;i++){
-      const h=document.createElement('div');
-      h.className='explosion-heart';
-      h.innerText='❤️';
-      const angle=Math.random()*2*Math.PI;
-      const distance=Math.random()*300 + 100;
-      h.style.setProperty('--x', `${Math.cos(angle)*distance}px`);
-      h.style.setProperty('--y', `${Math.sin(angle)*distance}px`);
-      h.style.left=`50%`;
-      h.style.top=`50%`;
-      document.getElementById('yesMsg').appendChild(h);
-      setTimeout(()=>h.remove(),2000);
-    }
-  }
 </script>
 </body>
 </html>
