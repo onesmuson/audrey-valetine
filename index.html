@@ -12,8 +12,10 @@
     min-height:100vh;
     background:linear-gradient(135deg,#ff758c,#ff7eb3);
     display:flex;align-items:center;justify-content:center;
-    color:#fff;overflow:hidden;
+    color:#fff;overflow:hidden;position:relative;
+    cursor:none; /* hide default cursor for heart effect */
   }
+
   .card{
     background:rgba(255,255,255,.15);
     backdrop-filter:blur(12px);
@@ -23,7 +25,10 @@
     text-align:center;
     box-shadow:0 25px 45px rgba(0,0,0,.28);
     animation:fadeIn 1.4s ease;
+    position:relative;
+    z-index:10;
   }
+
   h1{font-family:'Playfair Display',serif;font-size:2.1rem;margin-bottom:10px;}
   h2{font-size:1rem;font-weight:400;opacity:.95;margin-bottom:14px;}
   p{font-size:.98rem;line-height:1.65;margin-bottom:16px;}
@@ -60,18 +65,35 @@
     background:#fff;color:#ff4d6d;padding:10px 16px;border-radius:28px;
     font-weight:600;border:none;cursor:pointer;
   }
+  #reply-display{margin-top:8px;font-style:italic;}
 
+  /* Floating hearts (background) */
   .floating-heart{
     position:absolute;bottom:-50px;color:rgba(255,255,255,.7);
     font-size:20px;animation:floatUp 9s linear infinite;
   }
 
+  /* Scrolling messages */
+  .ticker{
+    width:100%;overflow:hidden;white-space:nowrap;
+    border-top:1px solid rgba(255,255,255,.4);
+    border-bottom:1px solid rgba(255,255,255,.4);
+    margin:12px 0;padding:8px 0;font-size:1rem;
+  }
+  .ticker span{
+    display:inline-block;
+    padding-right:40px;
+    animation:scrollMsg 18s linear infinite;
+  }
+
   @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1);}}
   @keyframes fadeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0);}}
   @keyframes floatUp{0%{transform:translateY(0);opacity:0}10%{opacity:1}100%{transform:translateY(-110vh);opacity:0;}}
+  @keyframes scrollMsg{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}  
 </style>
 </head>
 <body>
+
 <div class="card">
   <div class="heart">❤️</div>
   <h1>Audrey Ressy Achola</h1>
@@ -79,8 +101,7 @@
   <p>
     Audrey, every moment I spend thinking about you fills my heart with joy. 
     I admire your hard work in medicine, your kindness, and the way you light up every room. 
-    I love you more than words can ever express. 
-    Will you be my Valentine? 💖
+    I love you more than words can ever express. Will you be my Valentine? 💖
   </p>
 
   <div class="gallery">
@@ -103,14 +124,22 @@
   <button id="reply-btn" onclick="sendReply()">Send</button>
   <p id="reply-display" class="hidden"></p>
 
+  <!-- Love counter -->
+  <p id="love-counter"></p>
+
+  <!-- Scrolling love messages -->
+  <div class="ticker">
+    <span>💖 You are my sunshine 💖 I cherish every moment with you 💖 My heart beats only for you 💖 Forever yours 💖</span>
+  </div>
+
   <footer>— Meron</footer>
 </div>
 
 <script>
+  // Yes / No buttons
   function sayYes(){
     document.getElementById('yesMsg').classList.remove('hidden');
   }
-
   function runAway(){
     const btn=document.getElementById('noBtn');
     const x=Math.random()*200-100;
@@ -118,17 +147,7 @@
     btn.style.transform=`translate(${x}px, ${y}px)`;
   }
 
-  // Floating hearts
-  for(let i=0;i<22;i++){
-    const h=document.createElement('div');
-    h.className='floating-heart';h.innerHTML='❤️';
-    h.style.left=Math.random()*100+'vw';
-    h.style.animationDelay=Math.random()*9+'s';
-    h.style.fontSize=(Math.random()*22+14)+'px';
-    document.body.appendChild(h);
-  }
-
-  // Reply function
+  // Reply box
   function sendReply(){
     const replyBox=document.getElementById('reply-box');
     const replyDisplay=document.getElementById('reply-display');
@@ -138,6 +157,39 @@
       replyBox.value = "";
     }
   }
+
+  // Floating hearts in background
+  for(let i=0;i<22;i++){
+    const h=document.createElement('div');
+    h.className='floating-heart';h.innerHTML='❤️';
+    h.style.left=Math.random()*100+'vw';
+    h.style.animationDelay=Math.random()*9+'s';
+    h.style.fontSize=(Math.random()*22+14)+'px';
+    document.body.appendChild(h);
+  }
+
+  // Love counter - Days since start date
+  function updateLoveCounter(){
+    const startDate=new Date('2025-01-01'); // replace with the day you met
+    const today=new Date();
+    const diff=Math.floor((today-startDate)/(1000*60*60*24));
+    document.getElementById('love-counter').textContent = `💖 We have loved each other for ${diff} days 💖`;
+  }
+  updateLoveCounter();
+  setInterval(updateLoveCounter, 1000*60*60); // update every hour
+
+  // Hearts follow cursor
+  document.addEventListener('mousemove', function(e){
+    const heart=document.createElement('div');
+    heart.innerText='❤️';
+    heart.style.position='absolute';
+    heart.style.left=e.clientX+'px';
+    heart.style.top=e.clientY+'px';
+    heart.style.fontSize=Math.random()*22+14+'px';
+    heart.style.opacity=1;
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),1500);
+  });
 </script>
 </body>
 </html>
